@@ -9,15 +9,15 @@
             font-family: 'Segoe UI', Arial, sans-serif; 
             margin: 0; 
             padding: 0; 
-            background-color: #000000; /* Deep black background like Grok's base */
-            color: #FFFFFF; /* White text for contrast */
+            background-color: #000000; 
+            color: #FFFFFF; 
         }
         .header { 
-            background: linear-gradient(45deg, #00C4B4, #1E90FF); /* Teal to blue gradient for glowing effect */
+            background: linear-gradient(45deg, #00C4B4, #1E90FF); 
             color: #FFFFFF; 
             padding: 1.5rem; 
             text-align: center; 
-            box-shadow: 0 2px 10px rgba(0, 192, 180, 0.5); /* Subtle glowing shadow */
+            box-shadow: 0 2px 10px rgba(0, 192, 180, 0.5); 
         }
         .header h1 { 
             margin: 0; 
@@ -28,24 +28,24 @@
             max-width: 1100px; 
             margin: 1.5rem auto; 
             padding: 1.5rem; 
-            background: #1A1A1A; /* Dark gray to mimic Grok's depth */
+            background: #1A1A1A; 
             border-radius: 0.5rem; 
-            box-shadow: 0 4px 15px rgba(0, 196, 180, 0.3); /* Soft teal glow */
+            box-shadow: 0 4px 15px rgba(0, 196, 180, 0.3); 
         }
         table { 
             width: 100%; 
             border-collapse: collapse; 
             margin-top: 1.5rem; 
-            background-color: #2A2A2A; /* Darker table background */
+            background-color: #2A2A2A; 
         }
         th, td { 
-            border: 1px solid #333333; /* Dark border */
+            border: 1px solid #333333; 
             padding: 0.75rem; 
             text-align: left; 
-            color: #E0E0E0; /* Light gray text */
+            color: #E0E0E0; 
         }
         th { 
-            background: linear-gradient(90deg, #1E90FF, #00C4B4); /* Blue to teal gradient for headers */
+            background: linear-gradient(90deg, #1E90FF, #00C4B4); 
             color: #FFFFFF; 
             font-weight: 500; 
         }
@@ -58,14 +58,14 @@
         }
         select, button { 
             padding: 0.5rem 1rem; 
-            border: 1px solid #444444; /* Darker border */
+            border: 1px solid #444444; 
             border-radius: 0.375rem; 
             font-size: 0.875rem; 
-            background-color: #2A2A2A; /* Dark background */
+            background-color: #2A2A2A; 
             color: #FFFFFF; 
         }
         button { 
-            background: linear-gradient(45deg, #00C4B4, #1E90FF); /* Teal to blue gradient */
+            background: linear-gradient(45deg, #00C4B4, #1E90FF); 
             cursor: pointer; 
             transition: opacity 0.2s; 
         }
@@ -73,7 +73,7 @@
             opacity: 0.8; 
         }
         #stopMessage { 
-            color: #FF4040; /* Red warning color */
+            color: #FF4040; 
             font-weight: 600; 
             text-align: center; 
             margin: 1rem 0; 
@@ -93,7 +93,7 @@
             border-radius: 0.25rem; 
         }
         #clearScreenshots, #exportData { 
-            background: #FF4040; /* Red for clear/export */
+            background: #FF4040; 
             padding: 0.5rem 1rem; 
             border: none; 
             border-radius: 0.375rem; 
@@ -106,14 +106,14 @@
         #summary { 
             margin-top: 1.5rem; 
             padding: 1rem; 
-            background-color: #2A2A2A; /* Dark summary box */
+            background-color: #2A2A2A; 
             border-radius: 0.375rem; 
             font-size: 0.875rem; 
         }
         footer { 
             text-align: center; 
             padding: 0.75rem; 
-            background: linear-gradient(45deg, #00C4B4, #1E90FF); /* Teal to blue gradient */
+            background: linear-gradient(45deg, #00C4B4, #1E90FF); 
             color: #FFFFFF; 
             font-size: 0.75rem; 
             position: fixed; 
@@ -288,11 +288,18 @@
                 const reader = new FileReader();
                 readers.push(reader);
                 reader.onload = function(e) {
+                    if (e.target.error) {
+                        console.error('Error reading file:', e.target.error);
+                        return;
+                    }
                     screenshots.push({ src: e.target.result, timestamp: new Date().toISOString() });
-                    if (readers.every(r => r.readyState === 2)) { // Check if all readers are done (DONE state = 2)
+                    if (readers.every(r => r.readyState === 2)) {
                         saveScreenshots(screenshots);
                         displayScreenshots(screenshots);
                     }
+                };
+                reader.onerror = function(e) {
+                    console.error('FileReader error:', e);
                 };
                 reader.readAsDataURL(file);
             }
@@ -314,17 +321,29 @@
         function loadScreenshots() {
             const savedScreenshots = localStorage.getItem('demonFinderScreenshots');
             if (savedScreenshots) {
-                displayScreenshots(JSON.parse(savedScreenshots));
+                try {
+                    const screenshots = JSON.parse(savedScreenshots);
+                    displayScreenshots(screenshots);
+                } catch (e) {
+                    console.error('Error parsing screenshots from localStorage:', e);
+                    localStorage.removeItem('demonFinderScreenshots'); // Clear corrupted data
+                }
             }
         }
 
         function displayScreenshots(screenshots) {
             const container = document.getElementById('screenshotContainer');
-            container.innerHTML = '';
+            container.innerHTML = ''; // Clear existing images
             screenshots.forEach(screenshot => {
                 const img = document.createElement('img');
                 img.src = screenshot.src;
                 img.setAttribute('data-timestamp', screenshot.timestamp);
+                img.onload = function() {
+                    console.log('Image loaded:', screenshot.src);
+                };
+                img.onerror = function() {
+                    console.error('Failed to load image:', screenshot.src);
+                };
                 const timestamp = document.createElement('small');
                 timestamp.textContent = `Uploaded: ${new Date(screenshot.timestamp).toLocaleString()}`;
                 const div = document.createElement('div');
@@ -378,3 +397,11 @@
                 const imgData = canvas.toDataURL('image/png');
                 const imgProps = doc.getImageProperties(imgData);
                 const pdfWidth = doc.internal.pageSize.getWidth();
+                const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+                doc.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+                doc.save(`demon_finder_data_${new Date().toISOString().split('T')[0]}.pdf`);
+            });
+        }
+    </script>
+</body>
+</html>
