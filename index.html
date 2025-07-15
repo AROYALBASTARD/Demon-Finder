@@ -16,6 +16,11 @@
         button { margin-top: 20px; padding: 10px 20px; background-color: #4CAF50; color: white; border: none; cursor: pointer; }
         button:hover { background-color: #45a049; }
         #stopMessage { color: red; font-weight: bold; text-align: center; margin-top: 10px; display: none; }
+        #screenshotSection { margin-top: 20px; }
+        #screenshotSection input[type="file"] { margin-bottom: 10px; }
+        #screenshotSection img { max-width: 100%; height: auto; margin: 10px 0; border: 1px solid #ddd; }
+        #clearScreenshots { margin-top: 10px; padding: 5px 10px; background-color: #ff4444; color: white; border: none; cursor: pointer; }
+        #clearScreenshots:hover { background-color: #cc0000; }
     </style>
 </head>
 <body>
@@ -74,6 +79,12 @@
         <tr><td>DIDN'T TAKE PLANNED TRADE</td><td><input type="checkbox" class="checkbox" data-id="dtp-1" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="dtp-2" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="dtp-3" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="dtp-4" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="dtp-5" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="dtp-6" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="dtp-7" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="dtp-8" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="dtp-9" onchange="saveState()"></td></tr>
     </table>
 
+    <div id="screenshotSection">
+        <input type="file" id="screenshotUpload" accept="image/*" onchange="handleScreenshotUpload(event)" multiple>
+        <button id="clearScreenshots" onclick="clearScreenshots()">Clear Screenshots</button>
+        <div id="screenshotContainer"></div>
+    </div>
+
     <div class="rules">
         <h2>DEMONS WILL DESTROY YOUR EDGE</h2>
         <p>LEARN FROM YOUR ERRORS. IT IS THE ONLY WAY TO ACHIEVE SUCCESS</p>
@@ -97,6 +108,7 @@
                 state[cb.getAttribute('data-id')] = cb.checked;
             });
             localStorage.setItem('demonFinderState', JSON.stringify(state));
+            saveScreenshots();
             updateCount();
         }
 
@@ -112,6 +124,7 @@
                     }
                 });
             }
+            loadScreenshots();
             updateCount();
             checkStopMessage();
         }
@@ -129,6 +142,8 @@
             document.getElementById('demonCount').value = '1';
             document.querySelector('.header').style.backgroundColor = '#f0f0f0';
             document.getElementById('stopMessage').style.display = 'none';
+            localStorage.removeItem('demonFinderScreenshots');
+            document.getElementById('screenshotContainer').innerHTML = '';
         }
 
         function showStopMessage() {
@@ -140,6 +155,53 @@
         function checkStopMessage() {
             const stopCheckbox = document.querySelector('[data-id="stop"]');
             document.getElementById('stopMessage').style.display = stopCheckbox.checked ? 'block' : 'none';
+        }
+
+        function handleScreenshotUpload(event) {
+            const files = event.target.files;
+            const screenshots = [];
+            for (let file of files) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    screenshots.push(e.target.result);
+                    if (screenshots.length === files.length) {
+                        saveScreenshots(screenshots);
+                        displayScreenshots(screenshots);
+                    }
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function saveScreenshots(screenshots = null) {
+            if (screenshots) {
+                localStorage.setItem('demonFinderScreenshots', JSON.stringify(screenshots));
+            } else {
+                const currentScreenshots = Array.from(document.querySelectorAll('#screenshotContainer img')).map(img => img.src);
+                localStorage.setItem('demonFinderScreenshots', JSON.stringify(currentScreenshots));
+            }
+        }
+
+        function loadScreenshots() {
+            const savedScreenshots = localStorage.getItem('demonFinderScreenshots');
+            if (savedScreenshots) {
+                displayScreenshots(JSON.parse(savedScreenshots));
+            }
+        }
+
+        function displayScreenshots(screenshots) {
+            const container = document.getElementById('screenshotContainer');
+            container.innerHTML = '';
+            screenshots.forEach(src => {
+                const img = document.createElement('img');
+                img.src = src;
+                container.appendChild(img);
+            });
+        }
+
+        function clearScreenshots() {
+            localStorage.removeItem('demonFinderScreenshots');
+            document.getElementById('screenshotContainer').innerHTML = '';
         }
     </script>
 </body>
