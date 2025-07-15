@@ -15,6 +15,7 @@
         .checkbox { margin-right: 10px; }
         button { margin-top: 20px; padding: 10px 20px; background-color: #4CAF50; color: white; border: none; cursor: pointer; }
         button:hover { background-color: #45a049; }
+        #stopMessage { color: red; font-weight: bold; text-align: center; margin-top: 10px; display: none; }
     </style>
 </head>
 <body>
@@ -34,6 +35,8 @@
         <button onclick="resetForm()">Reset</button>
     </div>
 
+    <div id="stopMessage">You're gay, stop trading!</div>
+
     <table id="demonTable">
         <tr>
             <th>DEMON #</th>
@@ -50,25 +53,25 @@
         </tr>
         <tr>
             <td>POOR RISK/REWARD TRADE</td>
-            <td><input type="checkbox" class="checkbox" onchange="saveState()"></td>
-            <td><input type="checkbox" class="checkbox" onchange="saveState()"></td>
-            <td><input type="checkbox" class="checkbox" onchange="saveState()"></td>
-            <td><input type="checkbox" class="checkbox" onchange="saveState()"></td>
-            <td><input type="checkbox" class="checkbox" onchange="saveState()"></td>
-            <td><input type="checkbox" class="checkbox" onchange="saveState()"></td>
-            <td><input type="checkbox" class="checkbox" onchange="saveState()"></td>
-            <td><input type="checkbox" class="checkbox" onchange="saveState()"></td>
-            <td><input type="checkbox" class="checkbox" onchange="saveState()"></td>
-            <td rowspan="9"><input type="checkbox" class="checkbox" onchange="saveState()"></td>
+            <td><input type="checkbox" class="checkbox" data-id="prr-1" onchange="saveState()"></td>
+            <td><input type="checkbox" class="checkbox" data-id="prr-2" onchange="saveState()"></td>
+            <td><input type="checkbox" class="checkbox" data-id="prr-3" onchange="saveState()"></td>
+            <td><input type="checkbox" class="checkbox" data-id="prr-4" onchange="saveState()"></td>
+            <td><input type="checkbox" class="checkbox" data-id="prr-5" onchange="saveState()"></td>
+            <td><input type="checkbox" class="checkbox" data-id="prr-6" onchange="saveState()"></td>
+            <td><input type="checkbox" class="checkbox" data-id="prr-7" onchange="saveState()"></td>
+            <td><input type="checkbox" class="checkbox" data-id="prr-8" onchange="saveState()"></td>
+            <td><input type="checkbox" class="checkbox" data-id="prr-9" onchange="saveState()"></td>
+            <td rowspan="9"><input type="checkbox" class="checkbox" data-id="stop" onchange="showStopMessage()"></td>
         </tr>
-        <tr><td>ENTERED TOO SOON</td><td><input type="checkbox" class="checkbox" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" onchange="saveState()"></td></tr>
-        <tr><td>ENTERED TOO LATE</td><td><input type="checkbox" class="checkbox" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" onchange="saveState()"></td></tr>
-        <tr><td>EXITED TOO SOON</td><td><input type="checkbox" class="checkbox" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" onchange="saveState()"></td></tr>
-        <tr><td>EXITED TOO LATE</td><td><input type="checkbox" class="checkbox" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" onchange="saveState()"></td></tr>
-        <tr><td>TRADE NOT IN TRADING PLAN</td><td><input type="checkbox" class="checkbox" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" onchange="saveState()"></td></tr>
-        <tr><td>INCORRECT STOP PLACEMENT</td><td><input type="checkbox" class="checkbox" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" onchange="saveState()"></td></tr>
-        <tr><td>WRONG POSITION SIZE</td><td><input type="checkbox" class="checkbox" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" onchange="saveState()"></td></tr>
-        <tr><td>DIDN'T TAKE PLANNED TRADE</td><td><input type="checkbox" class="checkbox" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" onchange="saveState()"></td></tr>
+        <tr><td>ENTERED TOO SOON</td><td><input type="checkbox" class="checkbox" data-id="ets-1" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="ets-2" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="ets-3" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="ets-4" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="ets-5" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="ets-6" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="ets-7" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="ets-8" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="ets-9" onchange="saveState()"></td></tr>
+        <tr><td>ENTERED TOO LATE</td><td><input type="checkbox" class="checkbox" data-id="etl-1" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="etl-2" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="etl-3" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="etl-4" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="etl-5" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="etl-6" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="etl-7" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="etl-8" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="etl-9" onchange="saveState()"></td></tr>
+        <tr><td>EXITED TOO SOON</td><td><input type="checkbox" class="checkbox" data-id="xso-1" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="xso-2" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="xso-3" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="xso-4" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="xso-5" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="xso-6" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="xso-7" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="xso-8" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="xso-9" onchange="saveState()"></td></tr>
+        <tr><td>EXITED TOO LATE</td><td><input type="checkbox" class="checkbox" data-id="xla-1" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="xla-2" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="xla-3" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="xla-4" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="xla-5" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="xla-6" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="xla-7" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="xla-8" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="xla-9" onchange="saveState()"></td></tr>
+        <tr><td>TRADE NOT IN TRADING PLAN</td><td><input type="checkbox" class="checkbox" data-id="tnp-1" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="tnp-2" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="tnp-3" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="tnp-4" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="tnp-5" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="tnp-6" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="tnp-7" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="tnp-8" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="tnp-9" onchange="saveState()"></td></tr>
+        <tr><td>INCORRECT STOP PLACEMENT</td><td><input type="checkbox" class="checkbox" data-id="isp-1" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="isp-2" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="isp-3" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="isp-4" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="isp-5" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="isp-6" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="isp-7" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="isp-8" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="isp-9" onchange="saveState()"></td></tr>
+        <tr><td>WRONG POSITION SIZE</td><td><input type="checkbox" class="checkbox" data-id="wps-1" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="wps-2" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="wps-3" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="wps-4" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="wps-5" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="wps-6" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="wps-7" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="wps-8" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="wps-9" onchange="saveState()"></td></tr>
+        <tr><td>DIDN'T TAKE PLANNED TRADE</td><td><input type="checkbox" class="checkbox" data-id="dtp-1" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="dtp-2" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="dtp-3" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="dtp-4" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="dtp-5" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="dtp-6" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="dtp-7" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="dtp-8" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="dtp-9" onchange="saveState()"></td></tr>
     </table>
 
     <div class="rules">
@@ -90,8 +93,8 @@
         function saveState() {
             const checkboxes = document.querySelectorAll('.checkbox');
             const state = {};
-            checkboxes.forEach((cb, index) => {
-                state[`cb${index}`] = cb.checked;
+            checkboxes.forEach(cb => {
+                state[cb.getAttribute('data-id')] = cb.checked;
             });
             localStorage.setItem('demonFinderState', JSON.stringify(state));
             updateCount();
@@ -102,13 +105,15 @@
             if (savedState) {
                 const state = JSON.parse(savedState);
                 const checkboxes = document.querySelectorAll('.checkbox');
-                checkboxes.forEach((cb, index) => {
-                    if (state[`cb${index}`] !== undefined) {
-                        cb.checked = state[`cb${index}`];
+                checkboxes.forEach(cb => {
+                    const id = cb.getAttribute('data-id');
+                    if (state[id] !== undefined) {
+                        cb.checked = state[id];
                     }
                 });
             }
             updateCount();
+            checkStopMessage();
         }
 
         function updateCount() {
@@ -123,6 +128,18 @@
             localStorage.removeItem('demonFinderState');
             document.getElementById('demonCount').value = '1';
             document.querySelector('.header').style.backgroundColor = '#f0f0f0';
+            document.getElementById('stopMessage').style.display = 'none';
+        }
+
+        function showStopMessage() {
+            const stopCheckbox = document.querySelector('[data-id="stop"]');
+            document.getElementById('stopMessage').style.display = stopCheckbox.checked ? 'block' : 'none';
+            saveState();
+        }
+
+        function checkStopMessage() {
+            const stopCheckbox = document.querySelector('[data-id="stop"]');
+            document.getElementById('stopMessage').style.display = stopCheckbox.checked ? 'block' : 'none';
         }
     </script>
 </body>
