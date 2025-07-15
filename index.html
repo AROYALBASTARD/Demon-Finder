@@ -3,100 +3,120 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Demon Finder</title>
+    <title>Demon Finder Pro</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        .header { text-align: center; background-color: #f0f0f0; padding: 10px; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; background-color: #f4f4f4; }
+        .header { background-color: #2c3e50; color: white; padding: 20px; text-align: center; }
+        .header h1 { margin: 0; font-size: 2em; }
+        .container { max-width: 1200px; margin: 20px auto; padding: 20px; background: white; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
         table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-        th { background-color: #f2f2f2; }
-        .demon-count { color: red; font-weight: bold; }
-        .rules { border: 2px solid #000; padding: 10px; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background-color: #34495e; color: white; }
         .checkbox { margin-right: 10px; }
-        button { margin-top: 20px; padding: 10px 20px; background-color: #4CAF50; color: white; border: none; cursor: pointer; }
-        button:hover { background-color: #45a049; }
-        #stopMessage { color: red; font-weight: bold; text-align: center; margin-top: 10px; display: none; }
+        .controls { margin: 20px 0; }
+        select, button { padding: 10px; margin-right: 10px; border: 1px solid #ddd; border-radius: 4px; }
+        button { background-color: #2ecc71; color: white; cursor: pointer; }
+        button:hover { background-color: #27ae60; }
+        #stopMessage { color: #e74c3c; font-weight: bold; text-align: center; margin: 10px 0; display: none; }
         #screenshotSection { margin-top: 20px; }
         #screenshotSection input[type="file"] { margin-bottom: 10px; }
         #screenshotSection img { max-width: 100%; height: auto; margin: 10px 0; border: 1px solid #ddd; }
-        #clearScreenshots { margin-top: 10px; padding: 5px 10px; background-color: #ff4444; color: white; border: none; cursor: pointer; }
-        #clearScreenshots:hover { background-color: #cc0000; }
+        #clearScreenshots, #exportData { margin-top: 10px; padding: 10px; background-color: #e74c3c; color: white; border: none; cursor: pointer; }
+        #clearScreenshots:hover, #exportData:hover { background-color: #c0392b; }
+        #summary { margin-top: 20px; padding: 10px; background-color: #ecf0f1; border-radius: 4px; }
+        .tooltip { position: relative; display: inline-block; }
+        .tooltip .tooltiptext { visibility: hidden; width: 120px; background-color: #333; color: #fff; text-align: center; border-radius: 6px; padding: 5px; position: absolute; z-index: 1; bottom: 125%; left: 50%; margin-left: -60px; opacity: 0; transition: opacity 0.3s; }
+        .tooltip:hover .tooltiptext { visibility: visible; opacity: 1; }
+        footer { text-align: center; padding: 10px; background-color: #2c3e50; color: white; position: fixed; bottom: 0; width: 100%; }
     </style>
 </head>
 <body>
     <div class="header">
-        <h1>DEMON FINDER</h1>
-        <select id="demonCount" onchange="saveState()">
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-            <option value="8">8</option>
-            <option value="9">9</option>
-        </select>
-        <button onclick="resetForm()">Reset</button>
+        <h1>Demon Finder Pro</h1>
     </div>
+    <div class="container">
+        <div class="controls">
+            <select id="demonCount" onchange="saveState()">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+            </select>
+            <button onclick="if(confirm('Are you sure you want to reset all data?')) resetForm()">Reset All</button>
+        </div>
 
-    <div id="stopMessage">You're gay, stop trading!</div>
+        <div id="stopMessage">You're gay, stop trading!</div>
 
-    <table id="demonTable">
-        <tr>
-            <th>DEMON #</th>
-            <th>1</th>
-            <th>2</th>
-            <th>3</th>
-            <th>4</th>
-            <th>5</th>
-            <th>6</th>
-            <th>7</th>
-            <th>8</th>
-            <th>9</th>
-            <th>STOP TRADING</th>
-        </tr>
-        <tr>
-            <td>POOR RISK/REWARD TRADE</td>
-            <td><input type="checkbox" class="checkbox" data-id="prr-1" onchange="saveState()"></td>
-            <td><input type="checkbox" class="checkbox" data-id="prr-2" onchange="saveState()"></td>
-            <td><input type="checkbox" class="checkbox" data-id="prr-3" onchange="saveState()"></td>
-            <td><input type="checkbox" class="checkbox" data-id="prr-4" onchange="saveState()"></td>
-            <td><input type="checkbox" class="checkbox" data-id="prr-5" onchange="saveState()"></td>
-            <td><input type="checkbox" class="checkbox" data-id="prr-6" onchange="saveState()"></td>
-            <td><input type="checkbox" class="checkbox" data-id="prr-7" onchange="saveState()"></td>
-            <td><input type="checkbox" class="checkbox" data-id="prr-8" onchange="saveState()"></td>
-            <td><input type="checkbox" class="checkbox" data-id="prr-9" onchange="saveState()"></td>
-            <td rowspan="9"><input type="checkbox" class="checkbox" data-id="stop" onchange="showStopMessage()"></td>
-        </tr>
-        <tr><td>ENTERED TOO SOON</td><td><input type="checkbox" class="checkbox" data-id="ets-1" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="ets-2" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="ets-3" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="ets-4" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="ets-5" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="ets-6" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="ets-7" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="ets-8" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="ets-9" onchange="saveState()"></td></tr>
-        <tr><td>ENTERED TOO LATE</td><td><input type="checkbox" class="checkbox" data-id="etl-1" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="etl-2" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="etl-3" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="etl-4" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="etl-5" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="etl-6" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="etl-7" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="etl-8" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="etl-9" onchange="saveState()"></td></tr>
-        <tr><td>EXITED TOO SOON</td><td><input type="checkbox" class="checkbox" data-id="xso-1" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="xso-2" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="xso-3" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="xso-4" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="xso-5" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="xso-6" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="xso-7" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="xso-8" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="xso-9" onchange="saveState()"></td></tr>
-        <tr><td>EXITED TOO LATE</td><td><input type="checkbox" class="checkbox" data-id="xla-1" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="xla-2" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="xla-3" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="xla-4" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="xla-5" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="xla-6" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="xla-7" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="xla-8" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="xla-9" onchange="saveState()"></td></tr>
-        <tr><td>TRADE NOT IN TRADING PLAN</td><td><input type="checkbox" class="checkbox" data-id="tnp-1" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="tnp-2" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="tnp-3" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="tnp-4" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="tnp-5" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="tnp-6" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="tnp-7" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="tnp-8" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="tnp-9" onchange="saveState()"></td></tr>
-        <tr><td>INCORRECT STOP PLACEMENT</td><td><input type="checkbox" class="checkbox" data-id="isp-1" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="isp-2" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="isp-3" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="isp-4" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="isp-5" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="isp-6" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="isp-7" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="isp-8" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="isp-9" onchange="saveState()"></td></tr>
-        <tr><td>WRONG POSITION SIZE</td><td><input type="checkbox" class="checkbox" data-id="wps-1" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="wps-2" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="wps-3" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="wps-4" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="wps-5" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="wps-6" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="wps-7" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="wps-8" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="wps-9" onchange="saveState()"></td></tr>
-        <tr><td>DIDN'T TAKE PLANNED TRADE</td><td><input type="checkbox" class="checkbox" data-id="dtp-1" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="dtp-2" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="dtp-3" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="dtp-4" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="dtp-5" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="dtp-6" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="dtp-7" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="dtp-8" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="dtp-9" onchange="saveState()"></td></tr>
-    </table>
+        <table id="demonTable">
+            <tr>
+                <th>DEMON #</th>
+                <th>1</th>
+                <th>2</th>
+                <th>3</th>
+                <th>4</th>
+                <th>5</th>
+                <th>6</th>
+                <th>7</th>
+                <th>8</th>
+                <th>9</th>
+                <th>STOP TRADING</th>
+            </tr>
+            <tr>
+                <td>POOR RISK/REWARD TRADE</td>
+                <td><input type="checkbox" class="checkbox" data-id="prr-1" onchange="saveState()"></td>
+                <td><input type="checkbox" class="checkbox" data-id="prr-2" onchange="saveState()"></td>
+                <td><input type="checkbox" class="checkbox" data-id="prr-3" onchange="saveState()"></td>
+                <td><input type="checkbox" class="checkbox" data-id="prr-4" onchange="saveState()"></td>
+                <td><input type="checkbox" class="checkbox" data-id="prr-5" onchange="saveState()"></td>
+                <td><input type="checkbox" class="checkbox" data-id="prr-6" onchange="saveState()"></td>
+                <td><input type="checkbox" class="checkbox" data-id="prr-7" onchange="saveState()"></td>
+                <td><input type="checkbox" class="checkbox" data-id="prr-8" onchange="saveState()"></td>
+                <td><input type="checkbox" class="checkbox" data-id="prr-9" onchange="saveState()"></td>
+                <td rowspan="9"><input type="checkbox" class="checkbox" data-id="stop" onchange="showStopMessage()"></td>
+            </tr>
+            <tr><td>ENTERED TOO SOON</td><td><input type="checkbox" class="checkbox" data-id="ets-1" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="ets-2" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="ets-3" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="ets-4" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="ets-5" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="ets-6" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="ets-7" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="ets-8" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="ets-9" onchange="saveState()"></td></tr>
+            <tr><td>ENTERED TOO LATE</td><td><input type="checkbox" class="checkbox" data-id="etl-1" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="etl-2" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="etl-3" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="etl-4" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="etl-5" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="etl-6" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="etl-7" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="etl-8" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="etl-9" onchange="saveState()"></td></tr>
+            <tr><td>EXITED TOO SOON</td><td><input type="checkbox" class="checkbox" data-id="xso-1" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="xso-2" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="xso-3" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="xso-4" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="xso-5" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="xso-6" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="xso-7" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="xso-8" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="xso-9" onchange="saveState()"></td></tr>
+            <tr><td>EXITED TOO LATE</td><td><input type="checkbox" class="checkbox" data-id="xla-1" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="xla-2" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="xla-3" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="xla-4" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="xla-5" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="xla-6" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="xla-7" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="xla-8" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="xla-9" onchange="saveState()"></td></tr>
+            <tr><td>TRADE NOT IN TRADING PLAN</td><td><input type="checkbox" class="checkbox" data-id="tnp-1" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="tnp-2" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="tnp-3" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="tnp-4" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="tnp-5" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="tnp-6" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="tnp-7" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="tnp-8" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="tnp-9" onchange="saveState()"></td></tr>
+            <tr><td>INCORRECT STOP PLACEMENT</td><td><input type="checkbox" class="checkbox" data-id="isp-1" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="isp-2" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="isp-3" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="isp-4" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="isp-5" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="isp-6" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="isp-7" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="isp-8" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="isp-9" onchange="saveState()"></td></tr>
+            <tr><td>WRONG POSITION SIZE</td><td><input type="checkbox" class="checkbox" data-id="wps-1" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="wps-2" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="wps-3" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="wps-4" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="wps-5" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="wps-6" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="wps-7" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="wps-8" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="wps-9" onchange="saveState()"></td></tr>
+            <tr><td>DIDN'T TAKE PLANNED TRADE</td><td><input type="checkbox" class="checkbox" data-id="dtp-1" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="dtp-2" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="dtp-3" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="dtp-4" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="dtp-5" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="dtp-6" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="dtp-7" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="dtp-8" onchange="saveState()"></td><td><input type="checkbox" class="checkbox" data-id="dtp-9" onchange="saveState()"></td></tr>
+        </table>
 
-    <div id="screenshotSection">
-        <input type="file" id="screenshotUpload" accept="image/*" onchange="handleScreenshotUpload(event)" multiple>
-        <button id="clearScreenshots" onclick="clearScreenshots()">Clear Screenshots</button>
-        <div id="screenshotContainer"></div>
+        <div id="screenshotSection">
+            <input type="file" id="screenshotUpload" accept="image/*" onchange="handleScreenshotUpload(event)" multiple>
+            <button id="clearScreenshots" onclick="clearScreenshots()">Clear Screenshots</button>
+            <button id="exportData" onclick="exportData()">Export Data</button>
+            <div id="screenshotContainer"></div>
+        </div>
+
+        <div id="summary">
+            <h3>Summary</h3>
+            <p id="mostFrequentDemon">Most Frequent Demon: Calculating...</p>
+        </div>
+
+        <div class="rules">
+            <h2>DEMONS WILL DESTROY YOUR EDGE</h2>
+            <p>LEARN FROM YOUR ERRORS. IT IS THE ONLY WAY TO ACHIEVE SUCCESS</p>
+            <p>YOUR FUTURE PROFITABILITY DEPENDS ON YOUR KILLING THE DEMONS!</p>
+            <h3>RULES:</h3>
+            <ol>
+                <li>Place a check-mark in the corresponding box each time you commit the error.</li>
+                <li>Determine which Demon is outpacing the rest and kill that Demon as quickly as possible.</li>
+                <li>Once you have killed the worst Demon then move onto the next.</li>
+                <li>If you suffer the same Demon 10 times in a row, you may have some serious psychological issues that are blocking your progress. You should seriously consider whether trading is appropriate for you.</li>
+            </ol>
+        </div>
     </div>
-
-    <div class="rules">
-        <h2>DEMONS WILL DESTROY YOUR EDGE</h2>
-        <p>LEARN FROM YOUR ERRORS. IT IS THE ONLY WAY TO ACHIEVE SUCCESS</p>
-        <p>YOUR FUTURE PROFITABILITY DEPENDS ON YOUR KILLING THE DEMONS!</p>
-        <h3>RULES:</h3>
-        <ol>
-            <li>Place a check-mark in the corresponding box each time you commit the error.</li>
-            <li>Determine which Demon is outpacing the rest and kill that Demon as quickly as possible.</li>
-            <li>Once you have killed the worst Demon then move onto the next.</li>
-            <li>If you suffer the same Demon 10 times in a row, you may have some serious psychological issues that are blocking your progress. You should seriously consider whether trading is appropriate for you.</li>
-        </ol>
-    </div>
+    <footer>
+        <p>© 2025 Demon Finder Pro - All Rights Reserved</p>
+    </footer>
 
     <script>
         document.addEventListener('DOMContentLoaded', loadState);
@@ -109,6 +129,7 @@
             });
             localStorage.setItem('demonFinderState', JSON.stringify(state));
             saveScreenshots();
+            updateSummary();
             updateCount();
         }
 
@@ -127,23 +148,27 @@
             loadScreenshots();
             updateCount();
             checkStopMessage();
+            updateSummary();
         }
 
         function updateCount() {
             const checkboxes = document.querySelectorAll('.checkbox');
             let count = 0;
             checkboxes.forEach(cb => { if (cb.checked) count++; });
-            document.querySelector('.header').style.backgroundColor = count > 5 ? '#ffcccc' : '#f0f0f0';
+            document.querySelector('.header').style.backgroundColor = count > 5 ? '#e74c3c' : '#2ecc71';
         }
 
         function resetForm() {
-            document.querySelectorAll('.checkbox').forEach(cb => cb.checked = false);
-            localStorage.removeItem('demonFinderState');
-            document.getElementById('demonCount').value = '1';
-            document.querySelector('.header').style.backgroundColor = '#f0f0f0';
-            document.getElementById('stopMessage').style.display = 'none';
-            localStorage.removeItem('demonFinderScreenshots');
-            document.getElementById('screenshotContainer').innerHTML = '';
+            if (confirm('Are you sure you want to reset all data? This cannot be undone.')) {
+                document.querySelectorAll('.checkbox').forEach(cb => cb.checked = false);
+                localStorage.removeItem('demonFinderState');
+                document.getElementById('demonCount').value = '1';
+                document.querySelector('.header').style.backgroundColor = '#2ecc71';
+                document.getElementById('stopMessage').style.display = 'none';
+                localStorage.removeItem('demonFinderScreenshots');
+                document.getElementById('screenshotContainer').innerHTML = '';
+                updateSummary();
+            }
         }
 
         function showStopMessage() {
@@ -159,12 +184,18 @@
 
         function handleScreenshotUpload(event) {
             const files = event.target.files;
+            if (files.length > 5) {
+                alert('Please upload no more than 5 screenshots at a time.');
+                return;
+            }
             const screenshots = [];
+            const readers = [];
             for (let file of files) {
                 const reader = new FileReader();
+                readers.push(reader);
                 reader.onload = function(e) {
-                    screenshots.push(e.target.result);
-                    if (screenshots.length === files.length) {
+                    screenshots.push({ src: e.target.result, timestamp: new Date().toISOString() });
+                    if (readers.every(r => r.readyState === 2)) { // Check if all readers are done (DONE state = 2)
                         saveScreenshots(screenshots);
                         displayScreenshots(screenshots);
                     }
@@ -175,9 +206,13 @@
 
         function saveScreenshots(screenshots = null) {
             if (screenshots) {
-                localStorage.setItem('demonFinderScreenshots', JSON.stringify(screenshots));
+                const existingScreenshots = JSON.parse(localStorage.getItem('demonFinderScreenshots') || '[]');
+                const updatedScreenshots = [...existingScreenshots, ...screenshots];
+                localStorage.setItem('demonFinderScreenshots', JSON.stringify(updatedScreenshots));
             } else {
-                const currentScreenshots = Array.from(document.querySelectorAll('#screenshotContainer img')).map(img => img.src);
+                const currentScreenshots = Array.from(document.querySelectorAll('#screenshotContainer img')).map(img => {
+                    return { src: img.src, timestamp: img.getAttribute('data-timestamp') };
+                });
                 localStorage.setItem('demonFinderScreenshots', JSON.stringify(currentScreenshots));
             }
         }
@@ -192,16 +227,70 @@
         function displayScreenshots(screenshots) {
             const container = document.getElementById('screenshotContainer');
             container.innerHTML = '';
-            screenshots.forEach(src => {
+            screenshots.forEach(screenshot => {
                 const img = document.createElement('img');
-                img.src = src;
-                container.appendChild(img);
+                img.src = screenshot.src;
+                img.setAttribute('data-timestamp', screenshot.timestamp);
+                const timestamp = document.createElement('small');
+                timestamp.textContent = `Uploaded: ${new Date(screenshot.timestamp).toLocaleString()}`;
+                const div = document.createElement('div');
+                div.appendChild(img);
+                div.appendChild(timestamp);
+                container.appendChild(div);
             });
         }
 
         function clearScreenshots() {
             localStorage.removeItem('demonFinderScreenshots');
             document.getElementById('screenshotContainer').innerHTML = '';
+        }
+
+        function updateSummary() {
+            const checkboxes = document.querySelectorAll('.checkbox');
+            const counts = {
+                'prr': 0, 'ets': 0, 'etl': 0, 'xso': 0, 'xla': 0,
+                'tnp': 0, 'isp': 0, 'wps': 0, 'dtp': 0
+            };
+            checkboxes.forEach(cb => {
+                if (cb.checked) {
+                    const demon = cb.getAttribute('data-id').substring(0, 3);
+                    counts[demon]++;
+                }
+            });
+            const maxDemon = Object.keys(counts).reduce((a, b) => counts[a] > counts[b] ? a : b);
+            document.getElementById('mostFrequentDemon').textContent = `Most Frequent Demon: ${getDemonName(maxDemon)} (${counts[maxDemon]} occurrences)`;
+        }
+
+        function getDemonName(code) {
+            const demons = {
+                'prr': 'Poor Risk/Reward Trade',
+                'ets': 'Entered Too Soon',
+                'etl': 'Entered Too Late',
+                'xso': 'Exited Too Soon',
+                'xla': 'Exited Too Late',
+                'tnp': 'Trade Not in Plan',
+                'isp': 'Incorrect Stop Placement',
+                'wps': 'Wrong Position Size',
+                'dtp': 'Didn\'t Take Planned Trade'
+            };
+            return demons[code] || 'None';
+        }
+
+        function exportData() {
+            const state = JSON.parse(localStorage.getItem('demonFinderState') || '{}');
+            const screenshots = JSON.parse(localStorage.getItem('demonFinderScreenshots') || '[]');
+            const data = {
+                timestamp: new Date().toISOString(),
+                checkboxes: state,
+                screenshots: screenshots
+            };
+            const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(data));
+            const downloadAnchorNode = document.createElement('a');
+            downloadAnchorNode.setAttribute('href', dataStr);
+            downloadAnchorNode.setAttribute('download', `demon_finder_data_${new Date().toISOString().split('T')[0]}.json`);
+            document.body.appendChild(downloadAnchorNode);
+            downloadAnchorNode.click();
+            document.body.removeChild(downloadAnchorNode);
         }
     </script>
 </body>
