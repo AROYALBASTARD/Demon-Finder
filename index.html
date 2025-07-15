@@ -9,15 +9,15 @@
             font-family: 'Segoe UI', Arial, sans-serif; 
             margin: 0; 
             padding: 0; 
-            background-color: #000000; 
-            color: #FFFFFF; 
+            background-color: #f9fafb; /* Light gray background */
+            color: #1f2937; /* Dark text for contrast */
         }
         .header { 
-            background: linear-gradient(45deg, #00C4B4, #1E90FF); 
-            color: #FFFFFF; 
+            background-color: #1e3a8a; /* Deep blue header */
+            color: white; 
             padding: 1.5rem; 
             text-align: center; 
-            box-shadow: 0 2px 10px rgba(0, 192, 180, 0.5); 
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
         }
         .header h1 { 
             margin: 0; 
@@ -28,25 +28,24 @@
             max-width: 1100px; 
             margin: 1.5rem auto; 
             padding: 1.5rem; 
-            background: #1A1A1A; 
+            background: white; 
             border-radius: 0.5rem; 
-            box-shadow: 0 4px 15px rgba(0, 196, 180, 0.3); 
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
         }
         table { 
             width: 100%; 
             border-collapse: collapse; 
             margin-top: 1.5rem; 
-            background-color: #2A2A2A; 
+            background-color: #ffffff; 
         }
         th, td { 
-            border: 1px solid #333333; 
+            border: 1px solid #e5e7eb; /* Light border */
             padding: 0.75rem; 
             text-align: left; 
-            color: #E0E0E0; 
         }
         th { 
-            background: linear-gradient(90deg, #1E90FF, #00C4B4); 
-            color: #FFFFFF; 
+            background-color: #2b6cb0; /* Medium blue for headers */
+            color: white; 
             font-weight: 500; 
         }
         .checkbox { margin-right: 0.5rem; }
@@ -58,22 +57,21 @@
         }
         select, button { 
             padding: 0.5rem 1rem; 
-            border: 1px solid #444444; 
+            border: 1px solid #d1d5db; /* Subtle border */
             border-radius: 0.375rem; 
             font-size: 0.875rem; 
-            background-color: #2A2A2A; 
-            color: #FFFFFF; 
         }
         button { 
-            background: linear-gradient(45deg, #00C4B4, #1E90FF); 
+            background-color: #2dd4bf; /* Teal button */
+            color: white; 
             cursor: pointer; 
-            transition: opacity 0.2s; 
+            transition: background-color 0.2s; 
         }
         button:hover { 
-            opacity: 0.8; 
+            background-color: #14b8a6; /* Darker teal on hover */
         }
         #stopMessage { 
-            color: #FF4040; 
+            color: #dc2626; /* Red for warnings */
             font-weight: 600; 
             text-align: center; 
             margin: 1rem 0; 
@@ -89,32 +87,32 @@
             max-width: 100%; 
             height: auto; 
             margin: 0.5rem 0; 
-            border: 1px solid #333333; 
+            border: 1px solid #e5e7eb; 
             border-radius: 0.25rem; 
         }
         #clearScreenshots, #exportData { 
-            background: #FF4040; 
+            background-color: #ef4444; /* Red for clear/export buttons */
             padding: 0.5rem 1rem; 
             border: none; 
             border-radius: 0.375rem; 
             cursor: pointer; 
-            transition: opacity 0.2s; 
+            transition: background-color 0.2s; 
         }
         #clearScreenshots:hover, #exportData:hover { 
-            opacity: 0.8; 
+            background-color: #dc2626; /* Darker red on hover */
         }
         #summary { 
             margin-top: 1.5rem; 
             padding: 1rem; 
-            background-color: #2A2A2A; 
+            background-color: #f3f4f6; /* Light gray summary box */
             border-radius: 0.375rem; 
             font-size: 0.875rem; 
         }
         footer { 
             text-align: center; 
             padding: 0.75rem; 
-            background: linear-gradient(45deg, #00C4B4, #1E90FF); 
-            color: #FFFFFF; 
+            background-color: #1e3a8a; /* Deep blue footer */
+            color: white; 
             font-size: 0.75rem; 
             position: fixed; 
             bottom: 0; 
@@ -249,7 +247,7 @@
             const checkboxes = document.querySelectorAll('.checkbox');
             let count = 0;
             checkboxes.forEach(cb => { if (cb.checked) count++; });
-            document.querySelector('.header').style.background = count > 5 ? '#FF4040' : 'linear-gradient(45deg, #00C4B4, #1E90FF)';
+            document.querySelector('.header').style.backgroundColor = count > 5 ? '#dc2626' : '#2dd4bf';
         }
 
         function resetForm() {
@@ -257,7 +255,7 @@
                 document.querySelectorAll('.checkbox').forEach(cb => cb.checked = false);
                 localStorage.removeItem('demonFinderState');
                 document.getElementById('demonCount').value = '1';
-                document.querySelector('.header').style.background = 'linear-gradient(45deg, #00C4B4, #1E90FF)';
+                document.querySelector('.header').style.backgroundColor = '#2dd4bf';
                 document.getElementById('stopMessage').style.display = 'none';
                 localStorage.removeItem('demonFinderScreenshots');
                 document.getElementById('screenshotContainer').innerHTML = '';
@@ -288,18 +286,11 @@
                 const reader = new FileReader();
                 readers.push(reader);
                 reader.onload = function(e) {
-                    if (e.target.error) {
-                        console.error('Error reading file:', e.target.error);
-                        return;
-                    }
                     screenshots.push({ src: e.target.result, timestamp: new Date().toISOString() });
-                    if (readers.every(r => r.readyState === 2)) {
+                    if (readers.every(r => r.readyState === 2)) { // Check if all readers are done (DONE state = 2)
                         saveScreenshots(screenshots);
                         displayScreenshots(screenshots);
                     }
-                };
-                reader.onerror = function(e) {
-                    console.error('FileReader error:', e);
                 };
                 reader.readAsDataURL(file);
             }
@@ -321,29 +312,17 @@
         function loadScreenshots() {
             const savedScreenshots = localStorage.getItem('demonFinderScreenshots');
             if (savedScreenshots) {
-                try {
-                    const screenshots = JSON.parse(savedScreenshots);
-                    displayScreenshots(screenshots);
-                } catch (e) {
-                    console.error('Error parsing screenshots from localStorage:', e);
-                    localStorage.removeItem('demonFinderScreenshots'); // Clear corrupted data
-                }
+                displayScreenshots(JSON.parse(savedScreenshots));
             }
         }
 
         function displayScreenshots(screenshots) {
             const container = document.getElementById('screenshotContainer');
-            container.innerHTML = ''; // Clear existing images
+            container.innerHTML = '';
             screenshots.forEach(screenshot => {
                 const img = document.createElement('img');
                 img.src = screenshot.src;
                 img.setAttribute('data-timestamp', screenshot.timestamp);
-                img.onload = function() {
-                    console.log('Image loaded:', screenshot.src);
-                };
-                img.onerror = function() {
-                    console.error('Failed to load image:', screenshot.src);
-                };
                 const timestamp = document.createElement('small');
                 timestamp.textContent = `Uploaded: ${new Date(screenshot.timestamp).toLocaleString()}`;
                 const div = document.createElement('div');
