@@ -9,15 +9,15 @@
             font-family: 'Segoe UI', Arial, sans-serif; 
             margin: 0; 
             padding: 0; 
-            background-color: #f9fafb; /* Light gray background */
-            color: #1f2937; /* Dark text for contrast */
+            background-color: #000000; /* Deep black background like Grok's base */
+            color: #FFFFFF; /* White text for contrast */
         }
         .header { 
-            background-color: #1e3a8a; /* Deep blue header */
-            color: white; 
+            background: linear-gradient(45deg, #00C4B4, #1E90FF); /* Teal to blue gradient for glowing effect */
+            color: #FFFFFF; 
             padding: 1.5rem; 
             text-align: center; 
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+            box-shadow: 0 2px 10px rgba(0, 192, 180, 0.5); /* Subtle glowing shadow */
         }
         .header h1 { 
             margin: 0; 
@@ -28,24 +28,25 @@
             max-width: 1100px; 
             margin: 1.5rem auto; 
             padding: 1.5rem; 
-            background: white; 
+            background: #1A1A1A; /* Dark gray to mimic Grok's depth */
             border-radius: 0.5rem; 
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+            box-shadow: 0 4px 15px rgba(0, 196, 180, 0.3); /* Soft teal glow */
         }
         table { 
             width: 100%; 
             border-collapse: collapse; 
             margin-top: 1.5rem; 
-            background-color: #ffffff; 
+            background-color: #2A2A2A; /* Darker table background */
         }
         th, td { 
-            border: 1px solid #e5e7eb; /* Light border */
+            border: 1px solid #333333; /* Dark border */
             padding: 0.75rem; 
             text-align: left; 
+            color: #E0E0E0; /* Light gray text */
         }
         th { 
-            background-color: #2b6cb0; /* Medium blue for headers */
-            color: white; 
+            background: linear-gradient(90deg, #1E90FF, #00C4B4); /* Blue to teal gradient for headers */
+            color: #FFFFFF; 
             font-weight: 500; 
         }
         .checkbox { margin-right: 0.5rem; }
@@ -57,21 +58,22 @@
         }
         select, button { 
             padding: 0.5rem 1rem; 
-            border: 1px solid #d1d5db; /* Subtle border */
+            border: 1px solid #444444; /* Darker border */
             border-radius: 0.375rem; 
             font-size: 0.875rem; 
+            background-color: #2A2A2A; /* Dark background */
+            color: #FFFFFF; 
         }
         button { 
-            background-color: #2dd4bf; /* Teal button */
-            color: white; 
+            background: linear-gradient(45deg, #00C4B4, #1E90FF); /* Teal to blue gradient */
             cursor: pointer; 
-            transition: background-color 0.2s; 
+            transition: opacity 0.2s; 
         }
         button:hover { 
-            background-color: #14b8a6; /* Darker teal on hover */
+            opacity: 0.8; 
         }
         #stopMessage { 
-            color: #dc2626; /* Red for warnings */
+            color: #FF4040; /* Red warning color */
             font-weight: 600; 
             text-align: center; 
             margin: 1rem 0; 
@@ -87,32 +89,32 @@
             max-width: 100%; 
             height: auto; 
             margin: 0.5rem 0; 
-            border: 1px solid #e5e7eb; 
+            border: 1px solid #333333; 
             border-radius: 0.25rem; 
         }
         #clearScreenshots, #exportData { 
-            background-color: #ef4444; /* Red for clear/export buttons */
+            background: #FF4040; /* Red for clear/export */
             padding: 0.5rem 1rem; 
             border: none; 
             border-radius: 0.375rem; 
             cursor: pointer; 
-            transition: background-color 0.2s; 
+            transition: opacity 0.2s; 
         }
         #clearScreenshots:hover, #exportData:hover { 
-            background-color: #dc2626; /* Darker red on hover */
+            opacity: 0.8; 
         }
         #summary { 
             margin-top: 1.5rem; 
             padding: 1rem; 
-            background-color: #f3f4f6; /* Light gray summary box */
+            background-color: #2A2A2A; /* Dark summary box */
             border-radius: 0.375rem; 
             font-size: 0.875rem; 
         }
         footer { 
             text-align: center; 
             padding: 0.75rem; 
-            background-color: #1e3a8a; /* Deep blue footer */
-            color: white; 
+            background: linear-gradient(45deg, #00C4B4, #1E90FF); /* Teal to blue gradient */
+            color: #FFFFFF; 
             font-size: 0.75rem; 
             position: fixed; 
             bottom: 0; 
@@ -247,7 +249,7 @@
             const checkboxes = document.querySelectorAll('.checkbox');
             let count = 0;
             checkboxes.forEach(cb => { if (cb.checked) count++; });
-            document.querySelector('.header').style.backgroundColor = count > 5 ? '#dc2626' : '#2dd4bf';
+            document.querySelector('.header').style.background = count > 5 ? '#FF4040' : 'linear-gradient(45deg, #00C4B4, #1E90FF)';
         }
 
         function resetForm() {
@@ -255,7 +257,7 @@
                 document.querySelectorAll('.checkbox').forEach(cb => cb.checked = false);
                 localStorage.removeItem('demonFinderState');
                 document.getElementById('demonCount').value = '1';
-                document.querySelector('.header').style.backgroundColor = '#2dd4bf';
+                document.querySelector('.header').style.background = 'linear-gradient(45deg, #00C4B4, #1E90FF)';
                 document.getElementById('stopMessage').style.display = 'none';
                 localStorage.removeItem('demonFinderScreenshots');
                 document.getElementById('screenshotContainer').innerHTML = '';
@@ -376,11 +378,3 @@
                 const imgData = canvas.toDataURL('image/png');
                 const imgProps = doc.getImageProperties(imgData);
                 const pdfWidth = doc.internal.pageSize.getWidth();
-                const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-                doc.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-                doc.save(`demon_finder_data_${new Date().toISOString().split('T')[0]}.pdf`);
-            });
-        }
-    </script>
-</body>
-</html>
